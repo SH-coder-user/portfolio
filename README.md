@@ -1,9 +1,9 @@
-# 🧭 데이터 엔지니어링 로드맵 (Docker & Kubernetes 중심)
+# 🧭 데이터 엔지니어 로드맵 (Docker & Kubernetes 중심)
 
-> 💡 목표:  
+> 💡 **목표:**  
 > 데이터 파이프라인을 설계·자동화하고,  
-> Docker와 Kubernetes로 **운영 환경 수준의 프로젝트**를 완성한다.
-> 계획학습기간과 별개로 실제학습기간은 더 단축 되거나 늘어날 수 있다.
+> Docker와 Kubernetes로 **운영 환경 수준의 프로젝트**를 완성한다.  
+> ※ 학습 기간은 개인의 배경 지식과 실습 속도에 따라 달라질 수 있음.
 
 ---
 
@@ -11,234 +11,191 @@
 
 | 단계 | 주제 | 설명 | 기간 |
 |------|------|------|------|
-| 0단계 | 환경 준비 | Python + Docker + VSCode 세팅 | 1일 |
-| 1단계 | Python 기초 | 데이터 처리 로직의 기반 | 7일 |
-| 2단계 | SQL & DB | PostgreSQL로 데이터 저장/조회 | 7일 |
-| 3단계 | ETL 파이프라인 | 데이터 수집 → 변환 → 적재 자동화 | 7일 |
-| 4단계 | 데이터 모델링 | 스타 스키마 설계, 정규화/비정규화 | 5일 |
-| 5단계 | Airflow 오케스트레이션 | ETL 워크플로우 자동화 | 5일 |
-| 6단계 | Docker | 모든 환경을 컨테이너로 관리 | 5일 |
-| 7단계 | Kubernetes | 컨테이너 자동화·확장 운영 | 10일 |
-| 8단계 | 포트폴리오 프로젝트 | 실제 데이터 파이프라인 구축 | 7일 |
-
-총 학습 기간: **약 45~50일 (2개월)**  
-→ 완전 초보 → 실무형 데이터 엔지니어로 성장할 수 있는 커리큘럼
+| 0단계 | 환경 준비 | Python + Docker + VSCode 세팅
+| 1단계 | Python 기초 | 데이터 처리 로직의 기반
+| 2단계 | SQL & DB | PostgreSQL로 데이터 저장/조회
+| 3단계 | ETL 파이프라인 | 데이터 수집 → 변환 → 적재 자동화
+| 4단계 | 데이터 모델링 | 스타 스키마 설계, 정규화/비정규화 
+| 5단계 | Airflow 오케스트레이션 | 파이프라인 스케줄링과 DAG 구성 
+| 6단계 | Docker & Kubernetes | 배포 환경 구성 및 자동화
+| 7단계 | 클라우드 & CI/CD | AWS, GitHub Actions, 자동배포
 
 ---
 
-## 🪜 0단계. 환경 준비
+## 🧩 0단계: 환경 준비
 
-### 🎯 목표
-- Python, VSCode, Docker 설치
-- 실습용 폴더 구조 세팅
+### 목표
+- Python 개발 환경과 컨테이너 환경을 세팅한다.
 
-### 📘 핵심 명령어
-```bash
-python --version
-docker --version
-mkdir data-engineering-lab && cd data-engineering-lab
-```
-
----
-
-## 🧱 1단계. Python 기초 (7일)
-> 데이터 처리 로직의 핵심 언어
-
-| Day | 주제 | 학습 포인트 |
-|-----|------|--------------|
-| 1 | 환경 & 출력 | print(), f-string |
-| 2 | 변수와 자료형 | int, str, list, dict |
-| 3 | 조건문·반복문 | if / for / while |
-| 4 | 함수 | 코드 재사용, 모듈화 |
-| 5 | 파일 입출력 | CSV, JSON |
-| 6 | Pandas | 표 형식 데이터 처리 |
-| 7 | 미니 ETL 프로젝트 | Extract → Transform → Load |
-
-✅ 결과  
-> Python으로 CSV/JSON 데이터를 처리하는 기본 ETL 흐름 완성  
-
----
-
-## 🧭 2단계. SQL & Database (7일)
-> 데이터를 안전하게 저장하고 효율적으로 조회하는 기술
-
-### 📘 실습 환경: Docker 기반 PostgreSQL
+### 실습 항목
+1. Python 설치 (`3.10+`)
+2. VSCode + 확장팩 설치 (Python, Docker, YAML, GitLens)
+3. Docker Desktop 또는 WSL2 기반 Docker 설치
+4. GitHub 계정 생성 및 SSH Key 등록
+5. 테스트용 “Hello ETL” 스크립트 실행
 
 ```bash
-docker run --name pgdb -e POSTGRES_PASSWORD=1234 -p 5432:5432 -d postgres
-```
-
-| Day | 주제 | 실습 포인트 |
-|-----|------|--------------|
-| 1 | 데이터베이스 개념 | DB, Table, Row, Column |
-| 2 | SELECT 기초 | WHERE, ORDER BY |
-| 3 | GROUP BY, JOIN | 다중 테이블 관계 |
-| 4 | DDL, DML | CREATE, INSERT, UPDATE |
-| 5 | Index & Key | PK, FK 이해 |
-| 6 | Pandas + SQL 연동 | Python에서 DB 쿼리 |
-| 7 | 미니 DB 프로젝트 | 사용자·주문 테이블 설계 |
-
-✅ 결과  
-> 로컬 PostgreSQL + Python 연동 성공  
-> SQL 쿼리와 ETL 데이터 저장의 기초 완성
-
----
-
-## 🔄 3단계. ETL 파이프라인 구축 (7일)
-> 데이터 흐름 전체를 코드로 자동화
-
-### 📘 구성
-- Extract: CSV/JSON or API
-- Transform: Pandas로 정제
-- Load: PostgreSQL 저장
-
-| Day | 주제 | 예시 |
-|-----|------|------|
-| 1 | ETL 개념 이해 | Extract→Transform→Load |
-| 2 | 데이터 수집 | CSV, API 요청 |
-| 3 | 데이터 정제 | 결측치, 중복 제거 |
-| 4 | 적재(Load) | DB 저장 자동화 |
-| 5 | 스케줄링 | 매일 자동 실행(Cron) |
-| 6 | 로깅 | 실행 결과 기록 |
-| 7 | 미니 파이프라인 프로젝트 | 전체 흐름 연결 |
-
-✅ 결과  
-> Python 스크립트만으로 매일 실행되는 ETL 파이프라인 완성  
-
----
-
-## 🧩 4단계. 데이터 모델링 (5일)
-> 데이터를 분석하기 좋은 구조로 설계
-
-| Day | 주제 | 실습 |
-|-----|------|------|
-| 1 | 정규화/비정규화 | 테이블 분리와 조인 |
-| 2 | 스타 스키마 | Fact/Dimension 구분 |
-| 3 | DWH 개념 | 분석용 DB와 운영용 DB 차이 |
-| 4 | 성능 최적화 | Index, Partition |
-| 5 | ERD 설계 프로젝트 | ERD 다이어그램 만들기 |
-
-✅ 결과  
-> PostgreSQL 기반의 데이터 모델 설계 능력 확보  
-
----
-
-## ⚙️ 5단계. Airflow 오케스트레이션 (5일)
-> 여러 ETL 작업을 자동으로 관리하고 시각화하는 도구
-
-### 📘 실습 환경: Docker-compose 기반 Airflow
-
-```yaml
-version: '3'
-services:
-  postgres:
-    image: postgres:13
-    environment:
-      POSTGRES_PASSWORD: airflow
-  webserver:
-    image: apache/airflow:2.7.0
-    environment:
-      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-    ports:
-      - "8080:8080"
-```
-
-| Day | 주제 | 실습 |
-|-----|------|------|
-| 1 | Airflow 구조 | DAG, Operator, Task |
-| 2 | PythonOperator | Python 코드 자동화 |
-| 3 | Scheduling | 매일 정해진 시간 실행 |
-| 4 | Logging & Retry | 실패 시 재시도 |
-| 5 | DAG 프로젝트 | 실전 ETL 파이프라인 구성 |
-
-✅ 결과  
-> Docker 기반 Airflow 환경에서 자동화 파이프라인 완성  
-
----
-
-## 🐳 6단계. Docker 심화 (5일)
-> 파이프라인 전체를 컨테이너화하여 일관된 환경 구축
-
-| Day | 주제 | 실습 |
-|-----|------|------|
-| 1 | Docker 개념 | 이미지 vs 컨테이너 |
-| 2 | Dockerfile 작성 | Python, PostgreSQL |
-| 3 | Docker Compose | 다중 컨테이너 연결 |
-| 4 | 볼륨/네트워크 | 데이터 유지 및 통신 |
-| 5 | 프로젝트 컨테이너화 | 전체 ETL 시스템 통합 |
-
-✅ 결과  
-> Python + DB + Airflow + Logging 환경을 Docker로 완전 자동화  
-
----
-
-## ☸️ 7단계. Kubernetes 확장 (10일)
-> 컨테이너를 자동으로 배포, 확장, 복구하는 기술
-
-### 📘 실습 환경
-- Minikube (로컬 K8s 클러스터)
-- kubectl 명령어
-- yaml 배포 파일 작성
-
-| Day | 주제 | 실습 |
-|-----|------|------|
-| 1 | K8s 기본 구조 | Pod, Deployment, Service |
-| 2 | Minikube 설치 | 로컬 클러스터 실행 |
-| 3 | Pod 배포 | `kubectl apply -f` |
-| 4 | Deployment & Replica | 자동 복제 |
-| 5 | Service (ClusterIP/NodePort) | 통신 노출 |
-| 6 | Persistent Volume | 데이터 유지 |
-| 7 | StatefulSet | DB 안정적 운영 |
-| 8 | ConfigMap / Secret | 설정값 관리 |
-| 9 | Job / CronJob | ETL 자동 실행 |
-| 10 | Helm 패키지화 | 배포 자동화 |
-
-✅ 결과  
-> ETL 파이프라인을 Kubernetes 클러스터에서 자동 실행 및 확장 가능  
-
----
-
-## 🚀 8단계. 포트폴리오 프로젝트 (7일)
-> 실제 데이터 파이프라인 구축 & 자동화 시스템 완성
-
-### 🎯 목표
-- Docker/K8s 기반 데이터 파이프라인 구축
-- Airflow로 ETL 자동화
-- PostgreSQL 저장 및 로그 관리
-
-### 📘 예시 프로젝트
-**“일별 판매 데이터를 수집 → 변환 → DB 적재 → 자동화 스케줄링”**
-
-| 구성요소 | 도구 |
-|-----------|------|
-| 데이터 수집 | Python + API |
-| 데이터 변환 | Pandas |
-| 적재 | PostgreSQL |
-| 자동화 | Airflow DAG |
-| 배포 | Docker + Kubernetes |
-
-✅ 결과  
-> 완전 로컬 환경에서 동작하는 **엔드투엔드 데이터 파이프라인** 완성  
-> 포트폴리오로 바로 제출 가능 🎯
-
----
-
-## 🧠 학습 순서 요약
-
-```plaintext
-Python → SQL → ETL → Modeling → Airflow → Docker → Kubernetes → Project
+print("데이터 파이프라인 준비 완료!")
 ```
 
 ---
 
-## 💡 학습 비용
-💰 **0원 (100% 로컬 실행 가능)**  
-AWS, GCP 같은 클라우드 자원은 모두 Docker/Kubernetes로 대체됨.  
-필요할 경우 나중에만 AWS로 확장.
+## 🐍 1단계: Python 기초
+
+### 목표
+- ETL 파이프라인의 변환 로직을 구성할 수 있는 수준의 Python 실력 확보
+
+### 학습 내용
+1. 기본 문법: 변수, 조건문, 반복문
+2. 자료구조: 리스트, 튜플, 딕셔너리, 세트
+3. 함수, 모듈, 패키지 구조
+4. 파일 입출력 (`open`, `with`)
+5. 예외 처리 (`try-except`)
+6. 데이터 처리 기초 (`csv`, `json`)
+7. 클래스와 객체지향 개념
+
+### 실습
+- JSON 파일을 읽어 특정 필드만 추출 후 CSV로 저장
+- `if __name__ == "__main__":` 구조의 의미 이해 및 실습
 
 ---
 
-## 🔖 태그
-`#DataEngineering` `#Python` `#SQL` `#ETL`  
-`#Docker` `#Kubernetes` `#Airflow` `#PostgreSQL` `#Portfolio`
+## 🧮 2단계: SQL & 데이터베이스
 
+### 목표
+- 관계형 데이터 모델 설계 및 CRUD 조작 능력 확보
+
+### 학습 내용
+1. PostgreSQL 설치 및 CLI 실습
+2. 데이터베이스 / 테이블 생성
+3. 기본 CRUD (INSERT, SELECT, UPDATE, DELETE)
+4. JOIN, GROUP BY, HAVING, 서브쿼리
+5. 인덱스와 실행계획 (`EXPLAIN ANALYZE`)
+6. 트랜잭션, 커밋, 롤백
+7. Python과 DB 연결 (`psycopg2`)
+
+### 실습
+- Python 스크립트로 PostgreSQL 연동하여 데이터 적재
+- 실행 계획 비교로 쿼리 성능 확인
+
+---
+
+## ⚗️ 3단계: ETL 파이프라인
+
+### 목표
+- 데이터를 **수집(Extract) → 변환(Transform) → 적재(Load)** 하는 자동화 흐름을 구축한다.
+
+### 학습 내용
+1. ETL 개념과 구성요소
+2. API / 웹 크롤링 데이터 수집
+3. Pandas를 이용한 데이터 정제 및 변환
+4. DB 적재 자동화 (batch job)
+5. 스케줄링 기초 (`cron`, `schedule` 모듈)
+
+### 실습
+- 공공데이터 API를 주기적으로 호출하여 PostgreSQL에 적재
+- 로그 출력과 예외처리 구현
+
+---
+
+## 🧱 4단계: 데이터 모델링
+
+### 목표
+- 효율적인 데이터 구조 설계를 통해 분석 친화적인 스키마 구축
+
+### 학습 내용
+1. 정규화 / 비정규화 개념
+2. 스타 스키마, 스노우플레이크 스키마 설계
+3. Fact / Dimension 테이블 구분
+4. 물리적 설계 (데이터 타입, 제약조건)
+5. 샘플 데이터로 모델 검증
+
+### 실습
+- “판매 데이터 분석”용 스타 스키마 설계
+- ERD 작성 (dbdiagram.io, draw.io 등)
+
+---
+
+## 🪶 5단계: Airflow 오케스트레이션
+
+### 목표
+- ETL 파이프라인을 스케줄링하고 의존성을 관리한다.
+
+### 학습 내용
+1. Airflow 개요 및 아키텍처
+2. DAG (Directed Acyclic Graph) 구조
+3. Operator / Task / Scheduler
+4. BashOperator, PythonOperator 사용법
+5. Task 간 의존성 관리 (`>>`, `<<`)
+6. 로그 모니터링과 XCom
+
+### 실습
+- 간단한 DAG 작성 (`extract → transform → load`)
+- 주기적 스케줄링 설정 (매일 00시 실행)
+
+---
+
+## 🐳 6단계: Docker & Kubernetes
+
+### 목표
+- 컨테이너 기반 환경에서 ETL 파이프라인을 안정적으로 배포한다.
+
+### 학습 내용
+1. Dockerfile 작성 및 이미지 빌드
+2. docker-compose로 서비스 묶기
+3. Kubernetes 개요 및 주요 개념
+   - Pod, ReplicaSet, Deployment, StatefulSet
+4. Headless Service와 PVC를 이용한 데이터 보존
+5. `kubectl` 명령어와 yaml 매니페스트 작성
+
+### 실습
+- PostgreSQL StatefulSet 구성 (db-0: master / db-1~2: replica)
+- Airflow + PostgreSQL을 Kubernetes에 배포
+
+---
+
+## ☁️ 7단계: 클라우드 & CI/CD
+
+### 목표
+- 클라우드 환경에서 데이터 파이프라인을 자동화하고 배포까지 완료한다.
+
+### 학습 내용
+1. AWS 기본 서비스
+   - S3 (데이터 저장소)
+   - EC2 (Airflow 호스팅)
+   - IAM (권한 관리)
+2. GitHub Actions로 CI/CD 구성
+3. self-hosted runner 설정
+4. Docker 이미지 자동 빌드 및 배포
+5. 로그 및 모니터링 (CloudWatch, Grafana)
+
+### 실습
+- Airflow Docker 이미지를 GitHub Actions로 빌드 후 EC2로 자동 배포
+- S3 연동으로 데이터 백업/복구
+
+---
+
+## 🎯 학습 완료 후 역량
+
+| 구분 | 설명 |
+|------|------|
+| 프로그래밍 | Python 기반 데이터 처리 및 자동화 코드 작성 |
+| DB 설계 | 정규화/비정규화 모델링, SQL 성능 분석 |
+| 파이프라인 | ETL + Airflow 오케스트레이션 |
+| 인프라 | Docker, Kubernetes 기반 배포 |
+| 클라우드 | AWS 자원 활용 및 CI/CD 자동화 구축 |
+
+---
+
+## 📚 추천 학습 리소스
+
+- **Python:** 《점프 투 파이썬》, Python 공식 문서
+- **SQL:** Mode SQL Tutorial, PostgreSQL Docs
+- **Airflow:** Apache Airflow 공식 튜토리얼
+- **Docker & K8s:** Kubernetes 공식 문서, Docker Labs
+- **AWS:** AWS Skill Builder (CLF-C02 대비)
+- **CI/CD:** GitHub Actions Docs
+
+---
+
+> 📘 작성자: 데이터엔지니어링 로드맵 (SH ver.)
